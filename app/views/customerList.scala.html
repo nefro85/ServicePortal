@@ -1,0 +1,46 @@
+@import domain.Customer
+@(customers :List[Customer])
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Client List</h3>
+    </div>
+    <div class="panel-body">
+        <ul class="list-group">
+        @for(c <- customers) {
+            <li class="list-group-item">
+                <span class="badge">@c.issueCount()</span>
+                @c.getName()
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-cust_id="@c.getId()" data-target="#myModal">Edit</button>
+            </li>
+        }
+        </ul>
+    </div>
+</div>
+        <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    @customerEdit(customers(0))
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    $('#myModal').on('show.bs.modal', function (event) {
+        var button = $ ( event.relatedTarget ) // Button that triggered the modal
+        var custId = button.data( 'cust_id' ) // Extract info from data-*
+
+        var modal = $(this)
+        modal.find(".modal-title" ).text("Edit: " + custId)
+    })
+    </script>
